@@ -9,7 +9,6 @@ class UltimateStrength:
                               'constants',
                               'ultimate_strength.csv'), # Таблица составлена по ГОСТ 34233.1-2017 приложение А
                     delimiter=';')
-                    
     __temperature = __df['T']
     
     def __init__(self):
@@ -32,7 +31,3 @@ class UltimateStrength:
         return interpolated(t) # Возвращается интерполированное значение
 
     
-if __name__ == '__main__':
-    us = UltimateStrength()
-    print(us.get_ultimate_strength('09Г2С', 175))
-    print(us.get_ultimate_strength('Ст3', 410, thin=False, durability=20))

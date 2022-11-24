@@ -20,3 +20,6 @@ def test_calculate_Sr(shell):
 def test_calculate_unreinforced_hole(shell):
     shell.check_attributes()
     assert shell.calculate_unreinforced_hole() == 17
+
+def test_calculate_k_zap(shell):
+    assert shell.calculate_k_zap() == 1.88

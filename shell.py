@@ -32,9 +32,15 @@ class Shell:
     
     def set_S(self, S):
         self.__S = S
+    
+    def get_S(self):
+        return self.__S
 
     def set_C(self, C):
         self.__C = C
+    
+    def get_C(self):
+        return self.__C
     
     def set_phi(self, phi):
         self.__phi = phi
@@ -70,6 +76,9 @@ class Shell:
         self.unreinforced_hole = 0.4 * sqrt(self.__Dvn*(self.__S - self.__C))
         return round(self.unreinforced_hole, 0)
 
+    def calculate_k_zap(self):
+        Sr = self.calculate_Sr()
+        return round((self.get_S())/(Sr + self.get_C()), 2)
 if __name__ == '__main__':
 
     sh = Shell()
@@ -82,3 +91,4 @@ if __name__ == '__main__':
     sh.set_phi(0.9)    
     sh.check_attributes()
     logging.debug(sh.calculate_Sr())
+    logging.debug(sh.calculate_unreinforced_hole())

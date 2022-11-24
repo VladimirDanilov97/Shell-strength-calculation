@@ -8,7 +8,7 @@ app.config.from_object('config')
 @app.route('/', methods=['GET','POST'])
 def shell():
     form = ShellForm()
-    context = {'form': form, 'Sr': None}
+    context = {'form': form, 'Sr': None, 'd0r': None, 'k_zap': None}
  
     print(form.data)
     if form.validate_on_submit():
@@ -22,8 +22,10 @@ def shell():
         sh.set_S(float(form.S.data))
         sh.set_C(float(form.C.data))
         sh.set_phi(float(form.phi.data))
-        context['Sr'] = sh.calculate_Sr()
-
+        Sr = sh.calculate_Sr()
+        context['Sr'] = Sr
+        context['d0r'] = sh.calculate_unreinforced_hole()
+        context['k_zap'] = sh.calculate_k_zap()
     return render_template('shell.html', **context)
     
 
