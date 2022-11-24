@@ -63,12 +63,12 @@ class Shell:
         logging.debug(f'Attributes:\n{self.__dict__}')
 
     def calculate_Sr(self): # Возвращает расчетную толщину стенки
-        self.steel_ultimate_strength = self.us.get_ultimate_strength(
+        steel_ultimate_strength = self.us.get_ultimate_strength(
             steel = self.__steel,
             t = self.__T)
-        logging.debug(f'sigma - {self.steel_ultimate_strength}')
+        logging.debug(f'sigma - {steel_ultimate_strength}')
         numerator = self.__P * self.__Dvn                                   #ГОСТ 34233.2 5.3.1.1
-        denominator = 2*self.steel_ultimate_strength*self.__phi - self.__P
+        denominator = 2*steel_ultimate_strength*self.__phi - self.__P
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
@@ -78,7 +78,39 @@ class Shell:
 
     def calculate_k_zap(self):
         Sr = self.calculate_Sr()
-        return round((self.get_S())/(Sr + self.get_C()), 2)
+        return round((self.__S)/(Sr + self.__C), 2)
+    
+    def calculate_max_pressure(self):
+        steel_ultimate_strength = self.us.get_ultimate_strength(
+            steel = self.__steel,
+            t = self.__T)
+        numerator = 2*steel_ultimate_strength*self.__phi*(self.__S - self.__C )
+        denominator = self.__Dvn +self.__S - self.__C 
+        self.P_max = round(numerator/denominator, 2)
+        return self.P_max
+
+class ElepticBottom:
+    us = UltimateStrength()
+
+    def __init__(self) -> None:
+        self.__Dvn = None
+        self.__P = None
+        self.__T = None
+        self.__S = None
+        self.__steel = None
+        self.__C = None 
+        self.__phi = None
+
+    def calculate_Sr(self): # Возвращает расчетную толщину стенки
+        self.steel_ultimate_strength = self.us.get_ultimate_strength(
+            steel = self.__steel,
+            t = self.__T)
+        logging.debug(f'sigma - {self.steel_ultimate_strength}')
+        numerator = self.__P * self.__Dvn/2                                   #ГОСТ 34233.2 5.3.1.1
+        denominator = 2*self.steel_ultimate_strength*self.__phi - 0.5*self.__P
+        self.Sr = round(numerator/denominator,2)
+        return self.Sr 
+
 if __name__ == '__main__':
 
     sh = Shell()
@@ -92,3 +124,4 @@ if __name__ == '__main__':
     sh.check_attributes()
     logging.debug(sh.calculate_Sr())
     logging.debug(sh.calculate_unreinforced_hole())
+    logging.debug(sh.calculate_max_pressure())

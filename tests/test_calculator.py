@@ -1,4 +1,4 @@
-from shell import Shell
+from calculator import Shell, ElepticBottom
 import pytest
 
 @pytest.fixture()
@@ -23,3 +23,6 @@ def test_calculate_unreinforced_hole(shell):
 
 def test_calculate_k_zap(shell):
     assert shell.calculate_k_zap() == 1.88
+
+def test_calculate_pressure(shell):
+    assert shell.calculate_max_pressure() == 2.98
