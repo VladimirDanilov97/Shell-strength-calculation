@@ -13,12 +13,27 @@ def shell():
     sh.set_phi(0.9)    
     return sh
 
-def test_calculate_Sr(shell):
+def test_check_attribute(shell):
     shell.check_attributes()
+    assert True
+    
+
+def test_check_attribute_2(shell):
+    with pytest.raises(AttributeError) as exception:
+        shell.set_P(None)
+        shell.check_attributes()
+    assert 'Один из параметров не назначен' in str(exception.value) 
+    
+def test_check_attribute_negative(shell):
+    with pytest.raises(ValueError) as exception:
+        shell.set_T(-100)
+        shell.check_attributes()
+    assert 'T < 0' in str(exception.value) 
+
+def test_calculate_Sr(shell):
     assert shell.calculate_Sr() == 1.40
 
 def test_calculate_unreinforced_hole(shell):
-    shell.check_attributes()
     assert shell.calculate_unreinforced_hole() == 17
 
 def test_calculate_k_zap(shell):

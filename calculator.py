@@ -5,56 +5,66 @@ from math import sqrt
 logging.basicConfig(level=logging.DEBUG,
                     format="%(asctime)s %(levelname)s %(message)s")
 
-
-class Shell:
+class Part:
     us = UltimateStrength()
 
     def __init__(self) -> None:
-        self.__Dvn = None
-        self.__P = None
-        self.__T = None
-        self.__S = None
-        self.__steel = None
-        self.__C = None 
-        self.__phi = None
-
+        self._Dvn = None
+        self._P = None
+        self._T = None
+        self._S = None
+        self._steel = None
+        self._C = None 
+        self._phi = None
+    
     def set_Dvn(self, D):
-        self.__Dvn = D
+        self._Dvn = D
     
     def set_P(self, P):
-        self.__P = P
+        self._P = P
 
     def set_steel(self, steel_name='09Г2С'):
-        self.__steel = steel_name
+        self._steel = steel_name
     
     def set_T(self, T):
-        self.__T = T
+        self._T = T
     
     def set_S(self, S):
-        self.__S = S
+        self._S = S
     
     def get_S(self):
-        return self.__S
+        return self._S
 
     def set_C(self, C):
-        self.__C = C
+        self._C = C
     
     def get_C(self):
-        return self.__C
-    
+        return self._C
+
     def set_phi(self, phi):
-        self.__phi = phi
+        self._phi = phi
 
     def check_attributes(self):
         if None in self.__dict__.values():
-            raise AttributeError(self.__dict__)
+            raise AttributeError('Один из параметров не назначен')
+        for key, value in self.__dict__.items():
+            if key == '_steel':
+                continue
+            if float(value) < 0:
+                raise ValueError(f'{key} < 0')
+        
+class Shell(Part):
+    def __init__(self) -> None:
+        super().__init__()
+    
+    def check_attributes(self):
+        super().check_attributes()
 
-        if self.__Dvn < 0:
-            raise ValueError('D < 0')
+        
 
-        self.__ratio_to_check = (self.__S - self.__C)/self.__Dvn
+        self.__ratio_to_check = (self._S - self._C)/self._Dvn
 
-        if self.__Dvn < 200:
+        if self._Dvn < 200:
             if self.__ratio_to_check > 0.1:
                 raise AttributeError('Размеры не по ГОСТ')
         else:
@@ -64,43 +74,35 @@ class Shell:
 
     def calculate_Sr(self): # Возвращает расчетную толщину стенки
         steel_ultimate_strength = self.us.get_ultimate_strength(
-            steel = self.__steel,
-            t = self.__T)
+            steel = self._steel,
+            t = self._T)
         logging.debug(f'sigma - {steel_ultimate_strength}')
-        numerator = self.__P * self.__Dvn                                   #ГОСТ 34233.2 5.3.1.1
-        denominator = 2*steel_ultimate_strength*self.__phi - self.__P
+        numerator = self._P * self._Dvn                                   #ГОСТ 34233.2 5.3.1.1
+        denominator = 2*steel_ultimate_strength*self._phi - self._P
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
     def calculate_unreinforced_hole(self): # ГОСТ 342233.3-2017 5.2.8 (24)
-        self.unreinforced_hole = 0.4 * sqrt(self.__Dvn*(self.__S - self.__C))
+        self.unreinforced_hole = 0.4 * sqrt(self._Dvn*(self._S - self._C))
         return round(self.unreinforced_hole, 0)
 
     def calculate_k_zap(self):
         Sr = self.calculate_Sr()
-        return round((self.__S)/(Sr + self.__C), 2)
+        return round((self._S)/(Sr + self._C), 2)
     
     def calculate_max_pressure(self):
         steel_ultimate_strength = self.us.get_ultimate_strength(
-            steel = self.__steel,
-            t = self.__T)
-        numerator = 2*steel_ultimate_strength*self.__phi*(self.__S - self.__C )
-        denominator = self.__Dvn +self.__S - self.__C 
+            steel = self._steel,
+            t = self._T)
+        numerator = 2*steel_ultimate_strength*self._phi*(self._S - self._C )
+        denominator = self._Dvn +self._S - self._C 
         self.P_max = round(numerator/denominator, 2)
         return self.P_max
 
-class ElepticBottom:
+class ElepticBottom(Part):
     us = UltimateStrength()
 
-    def __init__(self) -> None:
-        self.__Dvn = None
-        self.__P = None
-        self.__T = None
-        self.__S = None
-        self.__steel = None
-        self.__C = None 
-        self.__phi = None
-
+   
     def calculate_Sr(self): # Возвращает расчетную толщину стенки
         self.steel_ultimate_strength = self.us.get_ultimate_strength(
             steel = self.__steel,

@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import DecimalField,StringField, SelectField
+from wtforms import DecimalField, SelectField
 from wtforms.validators import DataRequired
 
-class ShellForm(FlaskForm):
 
+class ShellForm(FlaskForm):
     P = DecimalField('P', validators = [DataRequired()])
     Dvn = DecimalField('Dvn', validators = [DataRequired()])
     T = DecimalField('T', validators = [DataRequired()])
@@ -14,5 +14,8 @@ class ShellForm(FlaskForm):
             choices=[('09Г2С', '09Г2С'),('Ст3', 'Ст3')],
             validators = [DataRequired()])
 
+
+class BottomForm(ShellForm):
+    H = DecimalField('C', validators = [DataRequired()])
 
     

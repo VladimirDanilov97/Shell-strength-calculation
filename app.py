@@ -1,20 +1,18 @@
 from flask import Flask, request, render_template
-from shell import Shell
+from calculator import Shell
 from forms import ShellForm
 app = Flask(__name__)
 app.config.from_object('config')
 
 
-@app.route('/', methods=['GET','POST'])
+@app.route('/shell', methods=['GET','POST'])
 def shell():
     form = ShellForm()
-    context = {'form': form, 'Sr': None, 'd0r': None, 'k_zap': None}
+    context = {'form': form, 'Sr': None, 'd0r': None, 
+               'k_zap': None, 'title': "Расчет обечайки"}
  
-    print(form.data)
     if form.validate_on_submit():
-        print('dfsdfsdfdsf')
         sh = Shell()
-      
         sh.set_P(float(form.P.data))
         sh.set_T(float(form.T.data))
         sh.set_Dvn(float(form.Dvn.data))
