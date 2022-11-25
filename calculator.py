@@ -52,7 +52,9 @@ class Part:
                 continue
             if float(value) < 0:
                 raise ValueError(f'{key} < 0')
-        
+
+        self._ratio_to_check = (self._S - self._C)/self._Dvn
+
 class Shell(Part):
     def __init__(self) -> None:
         super().__init__()
@@ -60,15 +62,11 @@ class Shell(Part):
     def check_attributes(self):
         super().check_attributes()
 
-        
-
-        self.__ratio_to_check = (self._S - self._C)/self._Dvn
-
         if self._Dvn < 200:
-            if self.__ratio_to_check > 0.1:
+            if self._ratio_to_check > 0.1:
                 raise AttributeError('Размеры не по ГОСТ')
         else:
-            if self.__ratio_to_check > 0.3:
+            if self._ratio_to_check > 0.3:
                 raise AttributeError('Размеры не по ГОСТ')
         logging.debug(f'Attributes:\n{self.__dict__}')
 
