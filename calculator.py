@@ -75,7 +75,7 @@ class Shell(Part):
             steel = self._steel,
             t = self._T)
         logging.debug(f'sigma - {steel_ultimate_strength}')
-        numerator = self._P * self._Dvn                                   #ГОСТ 34233.2 5.3.1.1
+        numerator = self._P * self._Dvn                                   #ГОСТ 34233.2 (5.3.1.1)
         denominator = 2*steel_ultimate_strength*self._phi - self._P
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
@@ -98,16 +98,31 @@ class Shell(Part):
         return self.P_max
 
 class ElepticBottom(Part):
-    us = UltimateStrength()
+    def __init__(self) -> None:
+        super().__init__()
+        self.H = None
 
-   
+    def set_H(self, H):
+        self.H = H
+    
+    def check_attributes(self):
+        super().check_attributes()
+
+        if self._ratio_to_check > 0.1 or self._ratio_to_check < 0.002:
+            raise AttributeError('Размеры не по ГОСТ')
+        else:
+            if self._ratio_to_check > 0.3:
+                raise AttributeError('Размеры не по ГОСТ')
+        logging.debug(f'Attributes:\n{self.__dict__}')
+
+
     def calculate_Sr(self): # Возвращает расчетную толщину стенки
         self.steel_ultimate_strength = self.us.get_ultimate_strength(
-            steel = self.__steel,
-            t = self.__T)
+            steel = self._steel,
+            t = self._T)
         logging.debug(f'sigma - {self.steel_ultimate_strength}')
-        numerator = self.__P * self.__Dvn/2                                   #ГОСТ 34233.2 5.3.1.1
-        denominator = 2*self.steel_ultimate_strength*self.__phi - 0.5*self.__P
+        numerator = self._P * self._Dvn/2                                   #ГОСТ 34233.2 5.3.1.1
+        denominator = 2*self.steel_ultimate_strength*self._phi - 0.5*self._P
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
