@@ -28,7 +28,7 @@ def shell():
  
     
 @app.route('/bottom', methods=['GET','POST'])
-def shell():
+def bottom():
     form = BottomForm()
     context = {'form': form, 'Sr': None, 'd0r': None, 
                'k_zap': None, 'title': "Расчет обечайки"}

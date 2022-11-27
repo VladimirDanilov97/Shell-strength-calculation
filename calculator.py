@@ -45,12 +45,12 @@ class Part:
         self._phi = phi
 
     def check_attributes(self):
-        if None in self.__dict__.values():
+        if None in self.__dict__.values():                            # Проверка на то, что все параметры заданы 
             raise AttributeError('Один из параметров не назначен')
         for key, value in self.__dict__.items():
             if key == '_steel':
                 continue
-            if float(value) < 0:
+            if float(value) < 0: # Проверка на то, что все параметры положительны. 
                 raise ValueError(f'{key} < 0')
 
         self._ratio_to_check = (self._S - self._C)/self._Dvn
