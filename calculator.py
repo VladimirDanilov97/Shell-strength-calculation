@@ -80,8 +80,9 @@ class Shell(Part):
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
-    def calculate_unreinforced_hole(self): # ГОСТ 342233.3-2017 5.2.8 (24)
-        self.unreinforced_hole = 0.4 * sqrt(self._Dvn*(self._S - self._C))
+    def calculate_unreinforced_hole(self): # ГОСТ 342233.3-2017 5.3.1.1 (26)
+        self.unreinforced_hole = 2*((self._S-self._C)/self.calculate_Sr()-0.8)*sqrt(
+            self._Dvn * (self._S-self._C)) 
         return round(self.unreinforced_hole, 0)
 
     def calculate_k_zap(self):
@@ -125,17 +126,4 @@ class ElepticBottom(Part):
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
-if __name__ == '__main__':
 
-    sh = Shell()
-    sh.set_P(1)
-    sh.set_T(200)
-    sh.set_Dvn(414)
-    sh.set_steel('09Г2С')
-    sh.set_S(6)
-    sh.set_C(1.8)
-    sh.set_phi(0.9)    
-    sh.check_attributes()
-    logging.debug(sh.calculate_Sr())
-    logging.debug(sh.calculate_unreinforced_hole())
-    logging.debug(sh.calculate_max_pressure())
