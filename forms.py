@@ -10,7 +10,7 @@ class ShellForm(FlaskForm): # Добавить валидатор положит
     Dvn = DecimalField('Dvn', validators = [DataRequired(), NumberRange(min=0.01)]) # Диаметр внутренний
     T = DecimalField('T', validators = [DataRequired(), NumberRange(min=0.01, max=430)]) # Расчетная температура
     S = DecimalField('S', validators = [DataRequired(), NumberRange(min=0.01)]) # Толщина стенки
-    phi = DecimalField('phi', validators = [DataRequired(), NumberRange(min=0.01)]) # Коэффициент прочности сварного шва 
+    phi = DecimalField('phi', validators = [DataRequired(), NumberRange(min=0.01, max=1)]) # Коэффициент прочности сварного шва 
     C = DecimalField('C', validators = [DataRequired(), NumberRange(min=0.01)]) # Суммарна прибавка к толщине стенки
     steel = SelectField('steel',
             choices=[('09Г2С', '09Г2С'),('Ст3', 'Ст3')],

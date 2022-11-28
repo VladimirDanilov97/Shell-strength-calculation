@@ -1,4 +1,4 @@
-from calculator import Shell, ElepticBottom
+from calculator import Shell
 import pytest
 
 @pytest.fixture()
@@ -41,3 +41,4 @@ def test_calculate_k_zap(shell):
 
 def test_calculate_pressure(shell):
     assert shell.calculate_max_pressure() == 2.98
+
