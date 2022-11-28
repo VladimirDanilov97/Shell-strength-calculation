@@ -9,10 +9,16 @@ app.config.from_object('config')
 def shell():
     form = ShellForm()
     context = {'form': form, 'Sr': None, 'd0r': None, 
-               'k_zap': None, 'title': "Расчет обечайки"}
+               'k_zap': None, 'title': "Расчет обечайки",
+               'error': None}
  
     if form.validate_on_submit():
         sh = Shell()
+
+        if form.S.data <= form.C.data:
+            context['error'] = "S < C"
+            return render_template('shell.html', **context)
+ 
         sh.set_P(float(form.P.data))
         sh.set_T(float(form.T.data))
         sh.set_Dvn(float(form.Dvn.data))
@@ -31,7 +37,8 @@ def shell():
 def bottom():
     form = BottomForm()
     context = {'form': form, 'Sr': None, 'd0r': None, 
-               'k_zap': None, 'title': "Расчет обечайки"}
+               'k_zap': None, 'title': "Расчет обечайки",
+               'error': None}
  
     if form.validate_on_submit():
         bt = ElepticBottom()
