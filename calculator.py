@@ -101,10 +101,10 @@ class Shell(Part):
 class ElepticBottom(Part):
     def __init__(self) -> None:
         super().__init__()
-        self.H = None
+        self._H = None
 
     def set_H(self, H):
-        self.H = H
+        self._H = H
     
     def check_attributes(self):
         super().check_attributes()
@@ -113,7 +113,7 @@ class ElepticBottom(Part):
         logging.debug(f'Attributes:\n{self.__dict__}')
 
     def calc_top_radius(self):
-        r = self._Dvn**2/(4 * self.H)
+        r = self._Dvn**2/(4 * self._H)
         return round(r, 2)
     
     def calculate_Sr(self): # Возвращает расчетную толщину стенки
@@ -121,9 +121,15 @@ class ElepticBottom(Part):
             steel = self._steel,
             t = self._T)
         logging.debug(f'sigma - {self.steel_ultimate_strength}')
-        numerator = self._P * self.calc_top_radius()                               #ГОСТ 34233.2 6.3.1.1
+        numerator = self._P * self.calc_top_radius()                               # ГОСТ 34233.2 6.3.1.1
         denominator = 2*self.steel_ultimate_strength*self._phi - 0.5*self._P
         self.Sr = round(numerator/denominator,2)
         return self.Sr 
 
+    def calculate_unreinforced_hole(self): # ГОСТ 342233.3-2017 5.3.1.1 (26)
+        chi = 1 # chi = [sigma]/[sigma]_1
+        Dr = self._Dvn**2/(2*self._H)*sqrt(1-4*(self._Dvn**2-self._H**2)/self._Dvn**4*chi**2) # Расчетный диаметр для днища ГОСТ 34233.3 (5.2.1)
+        self.unreinforced_hole = 2*((self._S-self._C)/self.calculate_Sr()-0.8)*sqrt(
+            Dr*(self._S-self._C)) 
+        return round(self.unreinforced_hole, 0)
 

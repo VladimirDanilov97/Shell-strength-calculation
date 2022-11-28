@@ -38,8 +38,8 @@ def test_top_radius(bt):
 def test_calculate_Sr(bt):
     assert bt.calculate_Sr() == 0.89
 
-# def test_calculate_unreinforced_hole(bt):
-#     assert bt.calculate_unreinforced_hole() == 17
+def test_calculate_unreinforced_hole(bt):
+    assert bt.calculate_unreinforced_hole() == 522
 
 # def test_calculate_k_zap(bt):
 #     assert bt.calculate_k_zap() == 1.88
