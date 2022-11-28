@@ -41,9 +41,6 @@ def test_calculate_Sr(bt):
 def test_calculate_unreinforced_hole(bt):
     assert bt.calculate_unreinforced_hole() == 522
 
-# def test_calculate_k_zap(bt):
-#     assert bt.calculate_k_zap() == 1.88
-
-# def test_calculate_pressure(bt):
-#     assert bt.calculate_max_pressure() == 2.98
+def test_calculate_pressure(bt):
+    assert bt.calculate_max_pressure() == 5.57
 

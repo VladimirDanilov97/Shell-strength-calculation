@@ -132,4 +132,16 @@ class ElepticBottom(Part):
         self.unreinforced_hole = 2*((self._S-self._C)/self.calculate_Sr()-0.8)*sqrt(
             Dr*(self._S-self._C)) 
         return round(self.unreinforced_hole, 0)
+    
+    def calculate_k_zap(self):
+        Sr = self.calculate_Sr()
+        return round((self._S)/(Sr + self._C), 2)
 
+    def calculate_max_pressure(self):
+        steel_ultimate_strength = self.us.get_ultimate_strength(
+            steel = self._steel,
+            t = self._T)
+        numerator = 2*steel_ultimate_strength*self._phi*(self._S - self._C )
+        denominator = self.calc_top_radius() + 0.5*(self._S - self._C) 
+        self.P_max = round(numerator/denominator, 2)
+        return self.P_max
