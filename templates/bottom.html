@@ -85,7 +85,11 @@
     <input type="submit" value="Submit">
     
     </form>
-<p>
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+    {{ error }}
+    </div>
+{% else %}
     {% if Sr %}
         <p><b>Расчетная толщина </b> {{ Sr }} мм</p>
     {% endif %}
@@ -95,5 +99,5 @@
     {% if k_zap %}
         <p><b>Коэффициент запаса прочности обечайки </b> {{ k_zap }}</p>
     {% endif %}
-</p>
+{% endif %}
 {% endblock %}
