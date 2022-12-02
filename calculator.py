@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.DEBUG,
 
 class Part:
     us = UltimateStrength()
-
+    HEATEXCHNGERTYPE = ['u-tube', 'floating_tubesheet', 'fixed_tubesheet']
     def __init__(self) -> None:
         self._Dvn = None
         self._P = None
@@ -99,6 +99,7 @@ class Shell(Part):
         return self.P_max
 
 class ElepticBottom(Part):
+    
     def __init__(self) -> None:
         super().__init__()
         self._H = None
@@ -142,6 +143,28 @@ class ElepticBottom(Part):
             steel = self._steel,
             t = self._T)
         numerator = 2*steel_ultimate_strength*self._phi*(self._S - self._C )
-        denominator = self.calc_top_radius() + 0.5*(self._S - self._C) 
+        denominator = self.calc_top_radius() + (self._S - self._C) 
         self.P_max = round(numerator/denominator, 2)
         return self.P_max
+
+class TubeSheet(Part):
+    def __init__(self) -> None:
+        super().__init__()
+        self._heatexchanger_type = None
+
+    def set_heatexchanger_type(self, he_type):
+        if he_type in self.HEATEXCHNGERTYPE:
+            self._heatexchanger_type = he_type
+        else:
+            raise AttributeError('Недопустимое значение типа теплообменника')
+    
+    def calculate_Sr(self): # Возвращает расчетную толщину стенки
+        if self._heatexchanger_type == 'u_tube':
+            pass
+        elif self._heatexchanger_type == 'floating_tubesheet':
+            pass
+        else:
+            pass
+
+       
+        
